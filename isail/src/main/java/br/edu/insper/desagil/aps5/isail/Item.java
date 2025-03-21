@@ -23,19 +23,27 @@ public class Item {
         return nome;
     }
 
+    public int indiceMelhorLance() {
+        if (ofertas.isEmpty()) {
+            return -1;
+        }
+        int indiceMelhor = 0;
+        for (int i = 1; i < ofertas.size(); i++) {
+            if (ofertas.get(i) > ofertas.get(indiceMelhor)) {
+                indiceMelhor = i;
+            }
+        }
+        return indiceMelhor;
+    }
+
     public void fazLance(Comprador comprador, double oferta) {
         if (oferta < minimo) {
             return;
         }
 
         if (!ofertas.isEmpty()) {
-            int maior = 0;
-            for (int i = 1; i < ofertas.size(); i++) {
-                if (ofertas.get(maior) < ofertas.get(i)) {
-                    maior = i;
-                }
-            }
-            if (oferta <= ofertas.get(maior)) {
+            int indiceMelhor = indiceMelhorLance();
+            if (oferta <= ofertas.get(indiceMelhor)) {
                 return;
             }
         }
@@ -47,17 +55,14 @@ public class Item {
         comprador.incrementa();
     }
 
+
     public void imprimeMelhorLance() {
-        if (ofertas.isEmpty()) {
+        int indiceMelhor = indiceMelhorLance();
+        if (indiceMelhor == -1) {
             System.out.println("Nenhum lance foi feito ainda!");
         } else {
-            int maior = 0;
-            for (int i = 1; i < ofertas.size(); i++) {
-                if (ofertas.get(maior) < ofertas.get(i)) {
-                    maior = i;
-                }
-            }
-            System.out.println(compradores.get(maior) + " ofereceu " + ofertas.get(maior) + " (" + momentos.toString() + ")");
+            System.out.println(compradores.get(indiceMelhor) + " ofereceu "
+                    + ofertas.get(indiceMelhor) + " (" + momentos.get(indiceMelhor) + ")");
         }
     }
 }
